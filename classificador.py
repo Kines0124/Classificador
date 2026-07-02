@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 # 1. Carrega o arquivo (dataset original fica intacto aqui)
-dataset = pd.read_csv('WA_Fn-UseC_-Telco-Customer-Churn.csv.csv', sep=',')
+dataset = pd.read_csv('WA_Fn-UseC_-Telco-Customer-Churn.csv', sep=',')
 
 # 2. Cria as variáveis X e y copiando os dados para não afetar o dataset original
 y = dataset['Churn'].copy()
@@ -70,7 +70,7 @@ x_teste[colunas_numericas] = sc.transform(x_teste[colunas_numericas])
     
 # MODELO 1: Regressão Logística
 
-modelo_logistica = LogisticRegression(class_weight='balanced', random_state=42)
+modelo_logistica = LogisticRegression( random_state=42)
 
 modelo_logistica.fit(x_treino, y_treino)
 
@@ -78,7 +78,7 @@ resultado_logistica = modelo_logistica.predict(x_teste)
 
 # Modelo 2: Random Forest
 
-modelo_rf = RandomForestClassifier(class_weight='balanced', max_depth=5, random_state=42)
+modelo_rf = RandomForestClassifier( max_depth=5, random_state=42)
 
 modelo_rf.fit(x_treino, y_treino)
 
@@ -114,8 +114,8 @@ df_importancias = pd.DataFrame({
 
 plt.figure(figsize=(10, 6))
 plt.barh(df_importancias['Variável'][::-1], df_importancias['Importância'][::-1], color='teal')
-plt.title('Top 10 Variáveis que Mais Afetam o Churn', fontsize=14)
-plt.xlabel('Grau de Importância', fontsize=12)
+plt.title('Top 10 Variables That Most Affect Churn', fontsize=14)
+plt.xlabel('Importance Level', fontsize=12)
 plt.grid(axis='x', linestyle='--', alpha=0.5)
 plt.tight_layout()
 plt.show()
@@ -127,9 +127,9 @@ cm_logistica = confusion_matrix(y_teste, resultado_logistica)
 
 disp = ConfusionMatrixDisplay(
     confusion_matrix=cm_logistica, 
-    display_labels=['Ficou (0)', 'Churn (1)']
+    display_labels=['Stayed (0)', 'Churn (1)']
 )
 
 disp.plot(cmap=plt.cm.Blues)
-plt.title("Matriz de Confusão - Regressão Logística")
+plt.title("Confusion Matrix - Logistic Regression")
 plt.show()

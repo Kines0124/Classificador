@@ -67,13 +67,13 @@ weighted avg       0.82      0.75      0.76      2113
 
 ### Confusion matrix (Logistic Regression)
 
-![Confusion Matrix](images/MatrizDeConfusão.png)
+![Confusion Matrix](images/ConfusionMatrix.png)
 
 Of the 574 customers who actually canceled the service in the test set, the model correctly identified 481 (84% recall), missing only 93 cases. On the other hand, 420 customers who did not cancel were classified as potential churn (false positives) — an expected and acceptable result given the balancing applied, since the focus of the project was to prioritize identifying at-risk customers.
 
 ### Feature importance (Random Forest)
 
-![Feature Importance](images/Rf-mais-relevantes.png)
+![Feature Importance](images/Top10.png)
 
 ## Key Insights
 
