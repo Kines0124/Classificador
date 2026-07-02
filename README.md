@@ -67,13 +67,13 @@ weighted avg       0.82      0.75      0.76      2113
 
 ### Matriz de confusão (Regressão Logística)
 
-![Matriz de Confusão](imagens/MatrizDeConfusão.png)
+![Matriz de Confusão](images/MatrizDeConfusão.png)
 
 Dos 574 clientes que realmente cancelaram o serviço no conjunto de teste, o modelo identificou corretamente 481 (recall de 84%), errando em apenas 93 casos. Em contrapartida, 420 clientes que não cancelaram foram classificados como possível churn (falsos positivos) — um resultado esperado e aceitável dado o balanceamento aplicado, já que o foco do projeto foi priorizar a identificação de clientes em risco.
 
 ### Importância das variáveis (Random Forest)
 
-![Importância das Variáveis](imagens/Rf-mais-relevantes.png)
+![Importância das Variáveis](images/Rf-mais-relevantes.png)
 
 ## Principais Insights
 
