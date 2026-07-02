@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 # 1. Carrega o arquivo (dataset original fica intacto aqui)
-dataset = pd.read_csv('datas.csv', sep=',')
+dataset = pd.read_csv('WA_Fn-UseC_-Telco-Customer-Churn.csv.csv', sep=',')
 
 # 2. Cria as variáveis X e y copiando os dados para não afetar o dataset original
 y = dataset['Churn'].copy()
@@ -118,4 +118,18 @@ plt.title('Top 10 Variáveis que Mais Afetam o Churn', fontsize=14)
 plt.xlabel('Grau de Importância', fontsize=12)
 plt.grid(axis='x', linestyle='--', alpha=0.5)
 plt.tight_layout()
+plt.show()
+
+# ========================================================
+# 12. Gráfico da Matriz de Confusão (Regressão Logística)
+# ========================================================
+cm_logistica = confusion_matrix(y_teste, resultado_logistica)
+
+disp = ConfusionMatrixDisplay(
+    confusion_matrix=cm_logistica, 
+    display_labels=['Ficou (0)', 'Churn (1)']
+)
+
+disp.plot(cmap=plt.cm.Blues)
+plt.title("Matriz de Confusão - Regressão Logística")
 plt.show()
