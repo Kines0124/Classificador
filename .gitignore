@@ -1,0 +1,29 @@
+# Dados (não subir datasets)
+*.csv
+*.tsv
+*.xlsx
+data/
+
+# Ambiente virtual
+venv/
+.venv/
+env/
+
+# Cache do Python
+__pycache__/
+*.pyc
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Modelos treinados salvos (se for exportar com pickle/joblib)
+*.pkl
+*.joblib
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
