@@ -1,51 +1,51 @@
-# Previsão de Churn de Clientes (Telecom)
+# Customer Churn Prediction (Telecom)
 
-Modelo de Machine Learning para prever se um cliente de uma empresa de telecomunicações vai cancelar o serviço (churn), com comparação entre dois algoritmos de classificação.
+Machine Learning model to predict whether a telecommunications company's customer will cancel the service (churn), with a comparison between two classification algorithms.
 
-## Objetivo
+## Objective
 
-O objetivo deste projeto foi colocar em prática, de ponta a ponta, os conhecimentos de Machine Learning com Scikit-Learn: desde a limpeza e preparação dos dados até o treinamento, avaliação e comparação de diferentes modelos de classificação — analisando não só qual modelo "acerta mais", mas qual realmente resolve melhor o problema de negócio.
+The goal of this project was to put into practice, end-to-end, Machine Learning knowledge using Scikit-Learn: from data cleaning and preparation to training, evaluation, and comparison of different classification models — analyzing not just which model "gets more right," but which one actually solves the business problem better.
 
 ## Dataset
 
-Os dados utilizados são do dataset [Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn), disponível publicamente no Kaggle. Contém informações reais (anonimizadas) de clientes de uma operadora de telecom, incluindo dados demográficos, tipo de contrato, serviços contratados e se o cliente cancelou ou não o serviço.
+The data used comes from the [Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) dataset, publicly available on Kaggle. It contains real (anonymized) data from telecom customers, including demographic information, contract type, subscribed services, and whether the customer canceled the service or not.
 
-> O arquivo CSV não está incluído neste repositório. Para reproduzir o projeto, baixe o dataset no link acima e salve como `WA_Fn-UseC_-Telco-Customer-Churn.csv` na raiz do projeto.
+> The CSV file is not included in this repository. To reproduce the project, download the dataset from the link above and save it as `WA_Fn-UseC_-Telco-Customer-Churn.csv` in the project root.
 
-## Metodologia
+## Methodology
 
-### 1. Preparação dos dados
-- Tratamento da coluna `TotalCharges`, que continha valores inconsistentes (strings vazias) e foi convertida para numérica, preenchendo os casos inválidos com 0.
-- Codificação de variáveis categóricas:
-  - **Label Encoding** para colunas binárias (`gender`, `Partner`, `Dependents`, `PhoneService`, `PaperlessBilling`).
-  - **One-Hot Encoding** para colunas com múltiplas categorias (`Contract`, `InternetService`, `PaymentMethod`, entre outras).
-- Padronização (`StandardScaler`) das variáveis numéricas (`tenure`, `MonthlyCharges`, `TotalCharges`), ajustada apenas nos dados de treino e aplicada nos dados de teste, para evitar vazamento de informação (data leakage).
-- Separação treino/teste com `train_test_split` (70/30, `random_state=42` para reprodutibilidade).
+### 1. Data preparation
+- Handling of the `TotalCharges` column, which contained inconsistent values (empty strings) and was converted to numeric, filling invalid cases with 0.
+- Encoding of categorical variables:
+  - **Label Encoding** for binary columns (`gender`, `Partner`, `Dependents`, `PhoneService`, `PaperlessBilling`).
+  - **One-Hot Encoding** for columns with multiple categories (`Contract`, `InternetService`, `PaymentMethod`, among others).
+- Standardization (`StandardScaler`) of numeric variables (`tenure`, `MonthlyCharges`, `TotalCharges`), fitted only on the training data and applied to the test data, to avoid data leakage.
+- Train/test split using `train_test_split` (70/30, `random_state=42` for reproducibility).
 
-### 2. Balanceamento de classes
-O dataset é desbalanceado: a maioria dos clientes não cancela o serviço. Isso faz com que um modelo "ingênuo" possa alcançar alta acurácia geral apenas prevendo "não vai cancelar" na maior parte dos casos — o que é inútil na prática, já que o objetivo é justamente identificar quem vai cancelar.
+### 2. Class balancing
+The dataset is imbalanced: most customers do not cancel the service. This means a "naive" model could achieve high overall accuracy just by predicting "won't cancel" most of the time — which is useless in practice, since the goal is precisely to identify who will cancel.
 
-Para lidar com isso, os dois modelos foram treinados com o parâmetro `class_weight='balanced'`. Em vez de duplicar ou gerar novos dados, essa técnica ajusta internamente a função de perda do modelo, penalizando mais os erros cometidos na classe minoritária (clientes que cancelam). O resultado foi um ganho expressivo de **recall** na classe de churn, ao custo de um pouco de precisão — um trade-off aceitável e até desejável neste tipo de problema, onde deixar passar um cliente que vai cancelar (falso negativo) tende a ser mais custoso para o negócio do que prever um cancelamento que não ocorre (falso positivo).
+To address this, both models were trained with the `class_weight='balanced'` parameter. Instead of duplicating or generating new data, this technique internally adjusts the model's loss function, penalizing errors on the minority class (customers who churn) more heavily. The result was a significant gain in **recall** for the churn class, at the cost of some precision — an acceptable and even desirable trade-off in this type of problem, where missing a customer who will churn (false negative) tends to be more costly for the business than predicting a cancellation that doesn't happen (false positive).
 
-### 3. Modelos treinados
-Dois modelos foram treinados e comparados:
+### 3. Trained models
+Two models were trained and compared:
 - **Logistic Regression**
 - **Random Forest Classifier**
 
-Para o Random Forest, o hiperparâmetro `max_depth` foi ajustado empiricamente. Foram testados valores mais altos e mais baixos de profundidade da árvore; valores altos levaram a overfitting (o modelo memorizava padrões do treino que não generalizavam bem para o teste), enquanto valores muito baixos perdiam capacidade de capturar relações relevantes nos dados. O valor `max_depth=5` apresentou o melhor equilíbrio entre generalização e desempenho durante os testes, e foi o adotado na versão final.
+For the Random Forest, the `max_depth` hyperparameter was tuned empirically. Higher and lower tree depth values were tested; high values led to overfitting (the model memorized patterns from the training set that did not generalize well to the test set), while values that were too low lost the ability to capture relevant relationships in the data. The value `max_depth=5` showed the best balance between generalization and performance during testing, and was the one adopted in the final version.
 
-## Resultados
+## Results
 
-| Métrica (classe Churn) | Logistic Regression | Random Forest |
+| Metric (Churn class) | Logistic Regression | Random Forest |
 |---|---|---|
-| Acurácia geral | 75,72% | 75,06% |
-| Precision | 0,53 | 0,53 |
-| Recall | 0,84 | 0,84 |
-| F1-score | 0,65 | 0,65 |
+| Overall accuracy | 75.72% | 75.06% |
+| Precision | 0.53 | 0.53 |
+| Recall | 0.84 | 0.84 |
+| F1-score | 0.65 | 0.65 |
 
-Relatório completo de classificação:
+Full classification report:
 
-**Regressão Logística**
+**Logistic Regression**
 ```
               precision    recall  f1-score   support
            0       0.92      0.73      0.81      1539
@@ -65,34 +65,34 @@ weighted avg       0.82      0.76      0.77      2113
 weighted avg       0.82      0.75      0.76      2113
 ```
 
-### Matriz de confusão (Regressão Logística)
+### Confusion matrix (Logistic Regression)
 
-![Matriz de Confusão](images/MatrizDeConfusão.png)
+![Confusion Matrix](images/MatrizDeConfusão.png)
 
-Dos 574 clientes que realmente cancelaram o serviço no conjunto de teste, o modelo identificou corretamente 481 (recall de 84%), errando em apenas 93 casos. Em contrapartida, 420 clientes que não cancelaram foram classificados como possível churn (falsos positivos) — um resultado esperado e aceitável dado o balanceamento aplicado, já que o foco do projeto foi priorizar a identificação de clientes em risco.
+Of the 574 customers who actually canceled the service in the test set, the model correctly identified 481 (84% recall), missing only 93 cases. On the other hand, 420 customers who did not cancel were classified as potential churn (false positives) — an expected and acceptable result given the balancing applied, since the focus of the project was to prioritize identifying at-risk customers.
 
-### Importância das variáveis (Random Forest)
+### Feature importance (Random Forest)
 
-![Importância das Variáveis](images/Rf-mais-relevantes.png)
+![Feature Importance](images/Rf-mais-relevantes.png)
 
-## Principais Insights
+## Key Insights
 
-- **`tenure` (tempo de contrato) é a variável mais relevante** para prever churn, seguida por contratos de 2 anos (`Contract_Two year`) e o valor total já pago (`TotalCharges`). Isso indica que clientes mais novos, sem vínculo de longo prazo, são o grupo de maior risco.
-- Clientes com **internet via fibra óptica** e que pagam por **boleto eletrônico (Electronic check)** também aparecem entre as variáveis mais influentes, sugerindo perfis de clientes específicos com maior propensão ao cancelamento.
-- Os dois modelos apresentaram **precision e recall praticamente idênticos na classe de churn** (0,53 / 0,84), variando apenas na acurácia geral. Isso mostra que, neste problema, o balanceamento de classes teve impacto tão relevante quanto (ou mais que) a escolha do algoritmo em si — e que um modelo mais simples (Regressão Logística) performou de forma equivalente a um modelo mais complexo (Random Forest).
+- **`tenure` (contract length) is the most relevant variable** for predicting churn, followed by two-year contracts (`Contract_Two year`) and the total amount already paid (`TotalCharges`). This indicates that newer customers, without a long-term commitment, are the highest-risk group.
+- Customers with **fiber optic internet** and who pay via **electronic check** also rank among the most influential variables, suggesting specific customer profiles with a higher propensity to cancel.
+- Both models showed **nearly identical precision and recall for the churn class** (0.53 / 0.84), differing only in overall accuracy. This shows that, in this problem, class balancing had as much impact as (or more than) the choice of algorithm itself — and that a simpler model (Logistic Regression) performed equivalently to a more complex one (Random Forest).
 
-## Tecnologias utilizadas
+## Technologies used
 
 - Python
 - Pandas
 - Scikit-Learn
 - Matplotlib
 
-## Como executar
+## How to run
 
 ```bash
 pip install -r requirements.txt
 python classificador.py
 ```
 
-> Certifique-se de ter baixado o dataset do Kaggle e salvo como `WA_Fn-UseC_-Telco-Customer-Churn.csv` na raiz do projeto antes de rodar o script.
+> Make sure you have downloaded the dataset from Kaggle and saved it as `WA_Fn-UseC_-Telco-Customer-Churn.csv` in the project root before running the script.
