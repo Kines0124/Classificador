@@ -3,6 +3,7 @@
 *.tsv
 *.xlsx
 data/
+*.pbix
 
 # Ambiente virtual
 venv/

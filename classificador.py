@@ -102,9 +102,8 @@ print(f"Acurácia Geral: {accuracy_score(y_teste, resultado_rf):.4f}")
 print("\nRelatório Detalhado:")
 print(classification_report(y_teste, resultado_rf))
 
-# ========================================================
 # 11. Gráfico de Importância das Variáveis (Random Forest)
-# ========================================================
+
 importancias = modelo_rf.feature_importances_
 
 df_importancias = pd.DataFrame({
@@ -120,9 +119,8 @@ plt.grid(axis='x', linestyle='--', alpha=0.5)
 plt.tight_layout()
 plt.show()
 
-# ========================================================
 # 12. Gráfico da Matriz de Confusão (Regressão Logística)
-# ========================================================
+
 cm_logistica = confusion_matrix(y_teste, resultado_logistica)
 
 disp = ConfusionMatrixDisplay(
@@ -133,3 +131,25 @@ disp = ConfusionMatrixDisplay(
 disp.plot(cmap=plt.cm.Blues)
 plt.title("Confusion Matrix - Logistic Regression")
 plt.show()
+
+# ========================================================
+# 13. Exportação das Previsões para o Power BI
+# ========================================================
+
+# Recuperando o customerID original
+ids_teste = dataset.loc[x_teste.index, 'customerID']
+
+# Probabilidade da classe churn
+probabilidades_rf = modelo_rf.predict_proba(x_teste)[: , 1]
+
+# Revertendo de 0/1 pra texto. 
+previsoes_texto = labelencoder_y.inverse_transform(resultado_rf)
+
+#Construindo o dataframe final
+df_previsoes = pd.DataFrame({
+    'customerID' : ids_teste.values,
+    'Previsao' : previsoes_texto,
+    'Probabilidade' : probabilidades_rf
+})
+
+df_previsoes.to_csv('previsoes_churn.csv', index=False)
