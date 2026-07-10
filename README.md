@@ -89,7 +89,7 @@ Two complementary analyses were built on top of this data:
 
 ### 1. Key Influencers (native Power BI visual)
 
-![Key Influencers](images/Principais%20Influenciadores%20BI.png)
+![Key Influencers](images/Principais-Influenciadores-BI.png)
 
 Using Power BI's built-in Key Influencers visual — which runs its own internal statistical analysis, independent of the Python model — on the **raw, non-encoded** categorical variables. `Contract = Month-to-month` emerged as the single strongest driver of churn (6.32x increase in likelihood), followed by the absence of online security (3.63x) and technical support (3.51x).
 
