@@ -81,12 +81,40 @@ Of the 574 customers who actually canceled the service in the test set, the mode
 - Customers with **fiber optic internet** and who pay via **electronic check** also rank among the most influential variables, suggesting specific customer profiles with a higher propensity to cancel.
 - Both models showed **nearly identical precision and recall for the churn class** (0.53 / 0.84), differing only in overall accuracy. This shows that, in this problem, class balancing had as much impact as (or more than) the choice of algorithm itself — and that a simpler model (Logistic Regression) performed equivalently to a more complex one (Random Forest).
 
+## Power BI Dashboard — Cross-Validation of Insights
+
+To validate the Random Forest's feature importance results through an independent method, the model's predictions on the test set were exported (`previsoes_churn.csv`, containing `customerID`, predicted class, and predicted probability) and loaded into a Power BI dashboard, related to the original dataset through `customerID`.
+
+Two complementary analyses were built on top of this data:
+
+### 1. Key Influencers (native Power BI visual)
+
+![Key Influencers](images/Principais%20Influenciadores%20BI.png)
+
+Using Power BI's built-in Key Influencers visual — which runs its own internal statistical analysis, independent of the Python model — on the **raw, non-encoded** categorical variables. `Contract = Month-to-month` emerged as the single strongest driver of churn (6.32x increase in likelihood), followed by the absence of online security (3.63x) and technical support (3.51x).
+
+### 2. Python script embedded in Power BI
+
+![Feature Importance (Power BI)](images/Top10BI.png)
+
+As a third, independent check, a simplified Random Forest was trained directly inside Power BI via an embedded Python visual, using Label Encoding instead of One-Hot Encoding. Here, `Contract` appears as a single, unified feature at the top of the ranking, with `tenure` immediately behind it.
+
+### Cross-method conclusion
+
+Three different approaches — the original Random Forest (One-Hot Encoding), Power BI's native Key Influencers (no encoding), and a simplified Random Forest embedded in Power BI (Label Encoding) — consistently point to **`Contract` and `tenure` as the two strongest churn drivers**, each surfacing this signal in a slightly different form depending on the encoding strategy used:
+
+- In the original Random Forest, `Contract`'s effect is split across its one-hot columns, so `Month-to-month` (the baseline category removed by `drop_first=True`) doesn't appear directly — but `Contract_Two year` ranking high is evidence of the same underlying effect, seen from the opposite side.
+- Without any encoding (Key Influencers) or with simple Label Encoding, `Contract` — and specifically the `Month-to-month` category — surfaces directly at the top.
+
+This convergence across three methodologically distinct approaches reinforces the robustness of the model's conclusions.
+
 ## Technologies used
 
 - Python
 - Pandas
 - Scikit-Learn
 - Matplotlib
+- Power BI (DAX, Key Influencers, embedded Python visuals)
 
 ## How to run
 
@@ -95,4 +123,4 @@ pip install -r requirements.txt
 python classificador.py
 ```
 
-> Make sure you have downloaded the dataset from Kaggle and saved it as `WA_Fn-UseC_-Telco-Customer-Churn.csv` in the project root before running the script.
+> Make sure you have downloaded the dataset from Kaggle and saved it as `WA_Fn-UseC_-Telco-Customer-Churn.csv` in the project root before running the script. Running the script also generates `previsoes_churn.csv`, used as the data source for the Power BI dashboard.
