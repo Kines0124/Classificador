@@ -95,7 +95,7 @@ Using Power BI's built-in Key Influencers visual — which runs its own internal
 
 ### 2. Python script embedded in Power BI
 
-![Feature Importance (Power BI)](images/Top10BI.png)
+![Feature Importance (Power BI)](images/powerbi/Top10BI.png)
 
 As a third, independent check, a simplified Random Forest was trained directly inside Power BI via an embedded Python visual, using Label Encoding instead of One-Hot Encoding. Here, `Contract` appears as a single, unified feature at the top of the ranking, with `tenure` immediately behind it.
 
