@@ -14,37 +14,27 @@ import matplotlib.pyplot as plt
 from train import train_logistic_regression, train_random_forest
 
 
-# Carregamento dos dados
+# CARREGAMENTO DOS DADOS
+
 df = pd.read_csv("data/processed/churn_modelagem.csv")
 
 
-# Treinamento dos modelos
-resultados_logistic_regression = train_logistic_regression(df)
-resultados_random_forest = train_random_forest(df)
+# TREINAMENTO DOS MODELOS
+
+resultados_logistic = train_logistic_regression(df)
+
+resultados_rf = train_random_forest(df)
 
 
-# Separação dos resultados - Logistic Regression
+# LOGISTIC REGRESSION
+
 (
     model_logistic,
     preprocessor_logistic,
     y_teste_logistic,
     y_pred_logistic,
     y_prob_logistic
-) = resultados_logistic_regression
-
-
-# Separação dos resultados - Random Forest
-(
-    model_rf,
-    preprocessor_rf,
-    y_teste_rf,
-    y_pred_rf,
-    y_prob_rf
-) = resultados_random_forest
-
-
-# ==========================================================
-# MÉTRICAS - LOGISTIC REGRESSION
+) = resultados_logistic
 
 acc_logistic = accuracy_score(
     y_teste_logistic,
@@ -78,7 +68,6 @@ roc_auc_logistic = roc_auc_score(
 )
 
 
-# Matriz de confusão - Logistic Regression
 matriz_logistic = confusion_matrix(
     y_teste_logistic,
     y_pred_logistic,
@@ -89,9 +78,16 @@ tn_logistic, fp_logistic, fn_logistic, tp_logistic = (
     matriz_logistic.ravel()
 )
 
+# RANDOM FOREST
 
-# ==========================================================
-# MÉTRICAS - RANDOM FOREST
+(
+    model_rf,
+    preprocessor_rf,
+    y_teste_rf,
+    y_pred_rf,
+    y_prob_rf
+) = resultados_rf
+
 
 acc_rf = accuracy_score(
     y_teste_rf,
@@ -125,7 +121,6 @@ roc_auc_rf = roc_auc_score(
 )
 
 
-# Matriz de confusão - Random Forest
 matriz_rf = confusion_matrix(
     y_teste_rf,
     y_pred_rf,
@@ -136,9 +131,7 @@ tn_rf, fp_rf, fn_rf, tp_rf = (
     matriz_rf.ravel()
 )
 
-
-# ==========================================================
-# PLOT - LOGISTIC REGRESSION
+# MATRIZ DE CONFUSÃO - LOGISTIC REGRESSION
 
 plt.figure(figsize=(6, 5))
 
@@ -158,9 +151,7 @@ plt.title("Matriz de Confusão - Logistic Regression")
 plt.tight_layout()
 plt.show()
 
-
-# ==========================================================
-# PLOT - RANDOM FOREST
+# MATRIZ DE CONFUSÃO - RANDOM FOREST
 
 plt.figure(figsize=(6, 5))
 
@@ -180,11 +171,12 @@ plt.title("Matriz de Confusão - Random Forest")
 plt.tight_layout()
 plt.show()
 
-
-# ==========================================================
 # RESULTADOS - LOGISTIC REGRESSION
 
-print("===== Logistic Regression =====")
+print("\n" + "=" * 50)
+print("LOGISTIC REGRESSION")
+print("=" * 50)
+
 print(f"Accuracy: {acc_logistic:.4f}")
 print(f"Precision: {precision_logistic:.4f}")
 print(f"Recall: {recall_logistic:.4f}")
@@ -196,11 +188,12 @@ print(f"False Positive: {fp_logistic}")
 print(f"False Negative: {fn_logistic}")
 print(f"True Positive: {tp_logistic}")
 
-
-# ==========================================================
 # RESULTADOS - RANDOM FOREST
 
-print("\n===== Random Forest =====")
+print("\n" + "=" * 50)
+print("RANDOM FOREST")
+print("=" * 50)
+
 print(f"Accuracy: {acc_rf:.4f}")
 print(f"Precision: {precision_rf:.4f}")
 print(f"Recall: {recall_rf:.4f}")
