@@ -2,7 +2,6 @@
 *.csv
 *.tsv
 *.xlsx
-data/
 
 # Ambiente virtual
 venv/
