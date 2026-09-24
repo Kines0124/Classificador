@@ -37,3 +37,29 @@ def preprocess(df, t_size=0.2, target='Churn'):
     
     return x_train,x_teste,y_train,y_teste,preprocess
 
+def create_preprocessor(x):
+
+    colunas_numericas = x.select_dtypes(
+        include=["int64", "float64"]
+    ).columns.tolist()
+
+    colunas_categoricas = x.select_dtypes(
+        include=["object", "category"]
+    ).columns.tolist()
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            (
+                "num",
+                StandardScaler(),
+                colunas_numericas
+            ),
+            (
+                "cat",
+                OneHotEncoder(handle_unknown="ignore"),
+                colunas_categoricas
+            )
+        ]
+    )
+
+    return preprocessor
