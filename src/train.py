@@ -27,12 +27,16 @@ def train_model(df, t_size=0.2):
     )
 
     y_pred = model.predict(x_teste_normalized)
+    
+    y_prob = model.predict_proba(
+    x_teste_normalized
+    )[:, 1]
 
-    return model, y_teste, y_pred
+    return model, y_teste, y_pred, y_prob
 
 
 if __name__ == "__main__":
 
     df = pd.read_csv("../data/processed/churn_modelagem.csv")
 
-    model, y_teste, y_pred = train_model(df)
+    model, y_teste, y_pred, y_prob = train_model(df)
