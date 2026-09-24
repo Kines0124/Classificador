@@ -49,7 +49,7 @@ def train_random_forest(df, t_size=0.2):
 
     model = RandomForestClassifier(
         class_weight="balanced",
-        max_depth=10,
+        max_depth=8,
         random_state=42
     )
 

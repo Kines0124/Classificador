@@ -1,57 +1,149 @@
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, confusion_matrix
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    roc_auc_score,
+    confusion_matrix
+)
+
 import pandas as pd
-from train import train_model
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+from train import train_logistic_regression, train_random_forest
+
+
+# Carregamento dos dados
 df = pd.read_csv("data/processed/churn_modelagem.csv")
 
-## Treinamento
-model, y_teste, y_pred, y_prob = train_model(df)
 
-## Métricas
-acc = accuracy_score (
-    y_teste,
-    y_pred
+# Treinamento dos modelos
+resultados_logistic_regression = train_logistic_regression(df)
+resultados_random_forest = train_random_forest(df)
+
+
+# Separação dos resultados - Logistic Regression
+(
+    model_logistic,
+    preprocessor_logistic,
+    y_teste_logistic,
+    y_pred_logistic,
+    y_prob_logistic
+) = resultados_logistic_regression
+
+
+# Separação dos resultados - Random Forest
+(
+    model_rf,
+    preprocessor_rf,
+    y_teste_rf,
+    y_pred_rf,
+    y_prob_rf
+) = resultados_random_forest
+
+
+# ==========================================================
+# MÉTRICAS - LOGISTIC REGRESSION
+
+acc_logistic = accuracy_score(
+    y_teste_logistic,
+    y_pred_logistic
 )
 
-precision = precision_score (
-    y_teste,
-    y_pred,
-    pos_label='Yes'
+precision_logistic = precision_score(
+    y_teste_logistic,
+    y_pred_logistic,
+    pos_label="Yes"
 )
 
-recall = recall_score (
-    y_teste,
-    y_pred,
-    pos_label='Yes'
+recall_logistic = recall_score(
+    y_teste_logistic,
+    y_pred_logistic,
+    pos_label="Yes"
 )
 
-f1 = f1_score (
-    y_teste,
-    y_pred,
-    pos_label='Yes'
+f1_logistic = f1_score(
+    y_teste_logistic,
+    y_pred_logistic,
+    pos_label="Yes"
 )
 
-roc_auc = roc_auc_score(
-    y_teste.map({
+roc_auc_logistic = roc_auc_score(
+    y_teste_logistic.map({
         "No": 0,
         "Yes": 1
     }),
-    y_prob
+    y_prob_logistic
 )
 
-# Matriz de confusão
-matriz_confusao = confusion_matrix(
-    y_teste,
-    y_pred,
+
+# Matriz de confusão - Logistic Regression
+matriz_logistic = confusion_matrix(
+    y_teste_logistic,
+    y_pred_logistic,
     labels=["No", "Yes"]
 )
+
+tn_logistic, fp_logistic, fn_logistic, tp_logistic = (
+    matriz_logistic.ravel()
+)
+
+
+# ==========================================================
+# MÉTRICAS - RANDOM FOREST
+
+acc_rf = accuracy_score(
+    y_teste_rf,
+    y_pred_rf
+)
+
+precision_rf = precision_score(
+    y_teste_rf,
+    y_pred_rf,
+    pos_label="Yes"
+)
+
+recall_rf = recall_score(
+    y_teste_rf,
+    y_pred_rf,
+    pos_label="Yes"
+)
+
+f1_rf = f1_score(
+    y_teste_rf,
+    y_pred_rf,
+    pos_label="Yes"
+)
+
+roc_auc_rf = roc_auc_score(
+    y_teste_rf.map({
+        "No": 0,
+        "Yes": 1
+    }),
+    y_prob_rf
+)
+
+
+# Matriz de confusão - Random Forest
+matriz_rf = confusion_matrix(
+    y_teste_rf,
+    y_pred_rf,
+    labels=["No", "Yes"]
+)
+
+tn_rf, fp_rf, fn_rf, tp_rf = (
+    matriz_rf.ravel()
+)
+
+
+# ==========================================================
+# PLOT - LOGISTIC REGRESSION
 
 plt.figure(figsize=(6, 5))
 
 sns.heatmap(
-    matriz_confusao,
+    matriz_logistic,
     annot=True,
     fmt="d",
     cmap="Blues",
@@ -67,20 +159,55 @@ plt.tight_layout()
 plt.show()
 
 
-tn, fp, fn, tp = matriz_confusao.ravel()
+# ==========================================================
+# PLOT - RANDOM FOREST
+
+plt.figure(figsize=(6, 5))
+
+sns.heatmap(
+    matriz_rf,
+    annot=True,
+    fmt="d",
+    cmap="Blues",
+    xticklabels=["No", "Yes"],
+    yticklabels=["No", "Yes"]
+)
+
+plt.xlabel("Previsto")
+plt.ylabel("Real")
+plt.title("Matriz de Confusão - Random Forest")
+
+plt.tight_layout()
+plt.show()
 
 
-# Resultados
-print(f"Accuracy: {acc:.4f}")
-print(f"Precision: {precision:.4f}")
-print(f"Recall: {recall:.4f}")
-print(f"F1-score: {f1:.4f}")
-print(f"ROC-AUC: {roc_auc:.4f}")
+# ==========================================================
+# RESULTADOS - LOGISTIC REGRESSION
 
-print("\nMatriz de confusão:")
-print(matriz_confusao)
+print("===== Logistic Regression =====")
+print(f"Accuracy: {acc_logistic:.4f}")
+print(f"Precision: {precision_logistic:.4f}")
+print(f"Recall: {recall_logistic:.4f}")
+print(f"F1-score: {f1_logistic:.4f}")
+print(f"ROC-AUC: {roc_auc_logistic:.4f}")
 
-print(f"\nTrue Negative: {tn}")
-print(f"False Positive: {fp}")
-print(f"False Negative: {fn}")
-print(f"True Positive: {tp}")
+print(f"\nTrue Negative: {tn_logistic}")
+print(f"False Positive: {fp_logistic}")
+print(f"False Negative: {fn_logistic}")
+print(f"True Positive: {tp_logistic}")
+
+
+# ==========================================================
+# RESULTADOS - RANDOM FOREST
+
+print("\n===== Random Forest =====")
+print(f"Accuracy: {acc_rf:.4f}")
+print(f"Precision: {precision_rf:.4f}")
+print(f"Recall: {recall_rf:.4f}")
+print(f"F1-score: {f1_rf:.4f}")
+print(f"ROC-AUC: {roc_auc_rf:.4f}")
+
+print(f"\nTrue Negative: {tn_rf}")
+print(f"False Positive: {fp_rf}")
+print(f"False Negative: {fn_rf}")
+print(f"True Positive: {tp_rf}")
