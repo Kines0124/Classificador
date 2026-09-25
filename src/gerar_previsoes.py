@@ -20,7 +20,6 @@ THRESHOLD = 0.50
 
 
 def gerar_previsoes(df):
-    customer_id = df["customerID"].copy()
 
     x = df.drop(columns=["customerID", "Churn"])
     y = df["Churn"]

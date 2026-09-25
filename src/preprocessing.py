@@ -1,4 +1,3 @@
-import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
@@ -28,14 +27,14 @@ def preprocess(df, t_size=0.2, target='Churn'):
     ).columns.tolist()
 
 
-    preprocess = ColumnTransformer(
+    preprocessor = ColumnTransformer(
         transformers=[
             ('num', StandardScaler(), colunas_numericas),
             ('cat', OneHotEncoder(handle_unknown="ignore"), colunas_categoricas)
         ]
     )
     
-    return x_train,x_teste,y_train,y_teste,preprocess
+    return x_train, x_teste, y_train, y_teste, preprocessor
 
 def create_preprocessor(x):
 
