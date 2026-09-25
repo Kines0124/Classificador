@@ -20,6 +20,9 @@ def train_logistic_regression(
         "gender",
         "PhoneService",
         "MultipleLines",
+        "Partner",
+        "SeniorCitizen",
+        "Dependents",
         "PaperlessBilling"
     ]
 
