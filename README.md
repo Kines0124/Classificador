@@ -14,11 +14,10 @@ Além da previsão, o projeto busca responder perguntas como:
 - Existem variáveis com informações muito semelhantes entre si?
 - Como as variáveis numéricas se relacionam?
 - Qual modelo apresenta um comportamento mais adequado para esse problema?
-- Como transformar as previsões do modelo em uma análise que seja útil para visualizar e interpretar os resultados?
 
 ## Dataset
 
-Foi utilizado o dataset **Telco Customer Churn**, disponibilizado no Kaggle.
+Foi utilizado o dataset [**Telco Customer Churn**](https://www.kaggle.com/datasets/blastchar/telco-customer-churn), disponibilizado no Kaggle.
 
 A base possui:
 
